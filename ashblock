@@ -33,13 +33,6 @@ print_success() {
   echo -e ""$done""$1""$endc""
 }
 
-# Check if you're root:
-check_root() {
-  if [ $(whoami) != "root" ]; then
-    print_error "Please run "$0" as ROOT!"
-  fi
-}
-
 # Check if command runned successfully:
 check_success() {
   if [ "$?" == "0" ]; then
@@ -56,17 +49,16 @@ case $1 in
     print_message "Version: 1.0.1 \"Antares\""
     print_message "License: GPLv2"
     ;;
-  update)
-    check_root
-    print_message "Downloading hosts file..."
-    wget ${file_source} -O /etc/hosts
-    check_success
-    ;;
-  help|""|*)
+  help)
     print_message "Usage: ashblock [COMMAND]"
     print_message "Available commands:"
     print_message "update: Updates the /etc/hosts file"
     print_message "about: About ashblock"
     print_message "help: This."
+    ;;
+  "")
+    print_message "Updating /etc/hosts file..."
+    pkexec wget ${file_source} -O /etc/hosts
+    check_success
     ;;
 esac
