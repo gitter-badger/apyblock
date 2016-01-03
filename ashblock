@@ -1,6 +1,6 @@
 #!/bin/bash
 # A Shell Blocker
-# The script for blocking ADs on the web.
+# Block annoying ADs with a simple script.
 # Copyright 2015, Federico Damián Schonborn <federicodamians@gmail.com>
 # License: GPLv2
 
@@ -52,7 +52,7 @@ check_success() {
 case $1 in
   about)
     print_message "A Shell Blocker"
-    print_message "The script for blocking ADs on the web."
+    print_message "Block annoying ADs with a simple script."
     print_message "Version: 1.0.1 \"Antares\""
     print_message "License: GPLv2"
     ;;
