@@ -1,6 +1,6 @@
 #!/bin/bash
 # A Shell Blocker
-# Block annoying ADs with a simple script.
+# Block annoying ADs with a single script.
 # Copyright 2015, Federico Damián Schonborn <federicodamians@gmail.com>
 # License: GPLv2
 
@@ -11,8 +11,6 @@ file_source="http://winhelp2002.mvps.org/hosts.txt"
 
 # Color prompts:
 bold="\e[1;34m> \e[0m\e[1m"
-error="\e[1;31m\u274C \e[0m\e[1m"
-done="\e[32;1m\u2713 \e[0m\e[1m"
 endc="\e[0m"
 
 # Functions:
@@ -23,23 +21,14 @@ print_message() {
 }
 
 # Print some errors:
-print_error() {
-  echo -e ""$error""$1""$endc""
+notify_error() {
+  notify-send "ashblock" "$1" -i face-sad-symbolic
   exit 1
 }
 
 # Print some success:
-print_success() {
-  echo -e ""$done""$1""$endc""
-}
-
-# Check if command runned successfully:
-check_success() {
-  if [ "$?" == "0" ]; then
-    print_success "DONE! :D"
-  else
-    print_error "FAILED! :("
-  fi
+notify_success() {
+  notify-send "ashblock" "$1" -i face-smile-symbolic
 }
 
 case $1 in
@@ -49,16 +38,12 @@ case $1 in
     print_message "Version: 1.0.1 \"Antares\""
     print_message "License: GPLv2"
     ;;
-  help)
-    print_message "Usage: ashblock [COMMAND]"
-    print_message "Available commands:"
-    print_message "update: Updates the /etc/hosts file"
-    print_message "about: About ashblock"
-    print_message "help: This."
-    ;;
   "")
-    print_message "Updating /etc/hosts file..."
     pkexec wget ${file_source} -O /etc/hosts
-    check_success
+    if [ "$?" == "0" ]; then
+      notify_success "Done!"
+    else
+      notify_error "Failed!"
+    fi
     ;;
 esac
