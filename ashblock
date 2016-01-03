@@ -10,12 +10,10 @@
 file_source="http://winhelp2002.mvps.org/hosts.txt"
 
 # Color prompts:
-
-bold="\e[1;34m>> \e[0m\e[1m"
+bold="\e[1;34m> \e[0m\e[1m"
 error="\e[1;31m\u274C \e[0m\e[1m"
 done="\e[32;1m\u2713 \e[0m\e[1m"
 endc="\e[0m"
-line="\n"
 
 # Functions:
 
@@ -26,19 +24,19 @@ print_message() {
 
 # Print some errors:
 print_error() {
-  echo -e ""$line""$error""$1""$endc""$line""
+  echo -e ""$error""$1""$endc""
   exit 1
 }
 
 # Print some success:
 print_success() {
-  echo -e ""$line""$done""$1""$endc""$line""
+  echo -e ""$done""$1""$endc""
 }
 
 # Check if you're root:
 check_root() {
   if [ $(whoami) != "root" ]; then
-    print_error "Please run ashblock as ROOT!"
+    print_error "Please run "$0" as ROOT!"
   fi
 }
 
@@ -55,19 +53,20 @@ case $1 in
   about)
     print_message "A Shell Blocker"
     print_message "The script for blocking ADs on the web."
-    print_message "Version: 1.0.1 \"Antaros\""
+    print_message "Version: 1.0.1 \"Antares\""
     print_message "License: GPLv2"
-    ;;
-  help)
-    print_message "Usage: ashblock [COMMAND]"$line""
-    print_message "Available commands:"$line""
-    print_message "update   Updates the /etc/hosts file"
-    print_message "about    About ashblock"
-    print_message "help     This."
     ;;
   update)
     check_root
-    print_message ""$line"Downloading hosts file..."$line""
+    print_message "Downloading hosts file..."
     wget ${file_source} -O /etc/hosts
     check_success
+    ;;
+  help|""|*)
+    print_message "Usage: ashblock [COMMAND]"
+    print_message "Available commands:"
+    print_message "update: Updates the /etc/hosts file"
+    print_message "about: About ashblock"
+    print_message "help: This."
+    ;;
 esac
