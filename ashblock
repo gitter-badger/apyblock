@@ -1,0 +1,37 @@
+#!/bin/bash
+# A Shell Blocker
+# The script for blocking ads on the web.
+# Copyright 2015, Federico Damián Schonborn <federicodamians@gmail.com>
+# License: GPLv2
+
+# Configurations:
+
+# Set the webpage for downloading the /etc/hosts file:
+HOSTS_SOURCE="http://winhelp2002.mvps.org/hosts.txt"
+
+case $1 in
+  about)
+    echo -e "\nA Shell Blocker"
+    echo -e "The script for blocking ads on the web."
+    echo -e "License: GPLv2\n"
+    ;;
+  help)
+    echo -e "\nUsage: ashblock [COMMAND]\n"
+    echo -e "Available commands:\n"
+    echo -e "update   Updates the /etc/hosts file"
+    echo -e "about    About ashblock"
+    echo -e "help     This.\n"
+    ;;
+  update)
+    if [ $(whoami) != "root" ]; then
+      echo -e "\nPlease run ashblock as ROOT!\n"
+      exit 1
+    fi
+    echo -e "\nDownloading hosts file...\n"
+    wget ${HOSTS_SOURCE} -O /etc/hosts
+    if [ "$?" == "0" ]; then
+      echo -e "\nDONE! :D\n"
+    else
+      echo -e "\nFAILED! :(\n"
+    fi
+esac
