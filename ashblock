@@ -1,6 +1,6 @@
 #!/bin/bash
 # A Shell Blocker
-# The script for blocking ads on the web.
+# The script for blocking ADs on the web.
 # Copyright 2015, Federico Damián Schonborn <federicodamians@gmail.com>
 # License: GPLv2
 
@@ -9,34 +9,65 @@
 # Set the webpage for downloading the /etc/hosts file:
 file_source="http://winhelp2002.mvps.org/hosts.txt"
 
-# Color prompts
+# Color prompts:
 
-bold="\e[1m"
+bold="\e[1;34m>> \e[0m\e[1m"
+error="\e[1;31m\u274C \e[0m\e[1m"
+done="\e[32;1m\u2713 \e[0m\e[1m"
 endc="\e[0m"
+line="\n"
+
+# Functions:
+
+# Print some messages:
+print_message() {
+  echo -e ""$bold""$1""$endc""
+}
+
+# Print some errors:
+print_error() {
+  echo -e ""$line""$error""$1""$endc""$line""
+  exit 1
+}
+
+# Print some success:
+print_success() {
+  echo -e ""$line""$done""$1""$endc""$line""
+}
+
+# Check if you're root:
+check_root() {
+  if [ $(whoami) != "root" ]; then
+    print_error "Please run ashblock as ROOT!"
+  fi
+}
+
+# Check if command runned successfully:
+check_success() {
+  if [ "$?" == "0" ]; then
+    print_success "DONE! :D"
+  else
+    print_error "FAILED! :("
+  fi
+}
 
 case $1 in
   about)
-    echo -e "\n"$bold"A Shell Blocker"
-    echo -e "The script for blocking ads on the web."
-    echo -e "License: GPLv2"$endc"\n"
+    print_message "A Shell Blocker"
+    print_message "The script for blocking ADs on the web."
+    print_message "Version: 1.0.1 \"Antaros\""
+    print_message "License: GPLv2"
     ;;
   help)
-    echo -e "\n"$bold"Usage: ashblock [COMMAND]"$endc"\n"
-    echo -e "Available commands:\n"
-    echo -e "update   Updates the /etc/hosts file"
-    echo -e "about    About ashblock"
-    echo -e "help     This.\n"
+    print_message "Usage: ashblock [COMMAND]"$line""
+    print_message "Available commands:"$line""
+    print_message "update   Updates the /etc/hosts file"
+    print_message "about    About ashblock"
+    print_message "help     This."
     ;;
   update)
-    if [ $(whoami) != "root" ]; then
-      echo -e "\n"$bold"Please run ashblock as ROOT!"$endc"\n"
-      exit 1
-    fi
-    echo -e "\n"$bold"Downloading hosts file..."$endc"\n"
+    check_root
+    print_message ""$line"Downloading hosts file..."$line""
     wget ${file_source} -O /etc/hosts
-    if [ "$?" == "0" ]; then
-      echo -e "\n"$bold"DONE! :D"$endc"\n"
-    else
-      echo -e "\n"$bold"FAILED! :("$endc"\n"
-    fi
+    check_success
 esac
