@@ -27,4 +27,4 @@ For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) 
 
 This program is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
-Thus, RoseSpine is <strong>free</strong> (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
+Thus, ashblock is <strong>free</strong> (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
