@@ -2,30 +2,30 @@
 
 A Shell Blocker, the script for blocking ads on the web.
 
-# Dependencies
+### Dependencies
 
 - `curl`: for downloading the `hosts` file.
 - `cron`: for running the Cron job (if installed).
 
-# Usage
+### Usage
 
 Just double-click the `ashblock` file (after checking if it's executable).
 
-# Cron job
+### Cron job
 
 A Cron job that updates the `host` file automagically can be executed daily (at 00:00 UTC time), check [extras/cronjob](https://github.com/feskyde/ashblock/tree/master/extras/cronjob) folder.
 
-# Installation
+### Installation
 
 Run the `INSTALL` script, you can also choose if you want the Cron job to be installed.
 
-# Releases
+### Releases
 
 Lastest: [v2.0](https://github.com/feskyde/ashblock/releases/tag/v2.0) "Betelgeuse".
 
 For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page
 
-# TO-DO
+### TO-DO
 
 - [x] Add a `cron` job for updating the `hosts` file every week.
 - [x] Replace `wget` (now using `curl`).
@@ -34,7 +34,7 @@ For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) 
   - [x] OS X (has a link to this file).
   - [x] BSD and other \*nixes (uses the same file location).
 
-# License
+### License
 
 This program is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
