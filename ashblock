@@ -7,43 +7,51 @@
 # Configurations:
 
 # Set the webpage for downloading the /etc/hosts file:
-file_source="https://github.com/StevenBlack/hosts/raw/master/hosts"
-
-# Color prompts:
-bold="\e[1;34m> \e[0m\e[1m"
-endc="\e[0m"
+file_source="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 
 # Functions:
 
-# Print some messages:
-print_message() {
-  echo -e ""$bold""$1""$endc""
-}
-
-# Print some errors:
-notify_error() {
+# Print error via notify-send:
+send_error() {
+  echo -e "$1"
   notify-send "A Shell Blocker" "$1" -i face-sad-symbolic
   exit 1
 }
 
-# Print some success:
-notify_success() {
+# Print success via notify-send:
+send_success() {
+  echo -e "$1"
   notify-send "A Shell Blocker" "$1" -i face-smile-symbolic
 }
 
 case $1 in
-  about)
-    print_message "A Shell Blocker (ashblock)"
-    print_message "Block annoying ADs with a simple script."
-    print_message "Version: 1.3.0 \"Antares\""
-    print_message "License: GPLv2"
+  about|-a)
+    echo -e "\n> A Shell Blocker (ashblock)"
+    echo -e "> Block annoying ADs with a simple script."
+    echo -e "> Version: 2.0 \"Betelgeuse\""
+    echo -e "> License: GPLv2\n"
     ;;
-  "")
-    pkexec wget ${file_source} -O /etc/hosts
-    if [ "$?" == "0" ]; then
-      notify_success "Done!"
+  help|?)
+    echo -e "\nUsage: ashblock [about|help|shell]\n"
+    echo -e "Options:"
+    echo -e "-a | about      See the version and license of this program."
+    echo -e "-d | desktop    Run in Desktop mode (default)."
+    echo -e "-s | shell      Execute ashblock in Shell mode (not pkexec and notify-send)."
+    echo -e " ? | help       This prompt!\n"
+    ;;
+  shell|-s)
+    if [[ ! $(whoami) = root ]]; then
+      echo -e "\nYou need to run 'ashblock' as root!\n"
+      exit 1
+    fi
+    curl "$file_source" -o /etc/hosts
+    ;;
+  ""|desktop|-d)
+    pkexec curl "$file_source" -o /etc/hosts
+    if [[ $? == 0 ]]; then
+      send_success "Done!"
     else
-      notify_error "Failed!"
+      send_error "Failed!"
     fi
     ;;
 esac

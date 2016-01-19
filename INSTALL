@@ -1,0 +1,29 @@
+#!/bin/sh
+# A Shell Blocker Installer
+
+if [ ! $(whoami) = "root" ]; then
+  echo -e "ERROR: You need to run this script as root"
+  exit 1
+fi
+echo -en "> A Shell Blocker will be installed, continue? (y/n) "; read installyn
+if [[ $installyn == [nN] ]]; then
+  echo -e "ERROR: Aborted by user!"
+  exit 1
+fi
+echo -e "> Installing..."
+cp -v ashblock /usr/bin/ashblock
+echo -en "> Install Cron job (it will update the hosts file every day)? (y/n) "; read cronyn
+if [[ $cronyn == [yY] ]]; then
+  if [[ ! -d /etc/ashblock ]]; then
+    mkdir -pv /etc/ashblock
+  fi
+  cp -v extras/cronjob/cronjob.conf /etc/ashblock/cronjob.conf
+  if [[ ! -d /etc/cron.daily ]]; then
+    mkdir -pv /etc/cron.daily
+  fi
+  cp -v extras/cronjob/ashblock.cron /etc/cron.daily/ashblock.cron
+  echo -e "> Cron job is installed."
+else
+  echo -e "> Cron job is not installed."
+fi
+echo -e "> Finished!"

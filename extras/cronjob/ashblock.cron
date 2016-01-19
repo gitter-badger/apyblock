@@ -1,0 +1,11 @@
+#!/bin/sh
+# Cronjob for A Shell Blocker
+# Copyright (C) 2016, Federico Damián Schonborn <federicodamians@gmail.com>
+
+if [ -x /etc/ashblock/cronjob.conf ]; then
+  source /etc/ashblock/cronjob.conf
+fi
+
+if [ -x "$bindir"/ashblock ]; then
+  "$bindir"/ashblock shell
+fi

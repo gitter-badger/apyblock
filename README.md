@@ -18,10 +18,12 @@ For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) 
 
 # TO-DO
 
-- [ ] Add a `cron` job for updating the `hosts` file every week.
-- [ ] Replace `wget`.
-- [ ] Make a little interface (`zenity`?)
-- [ ] Port to Windows and OS X.
+- [x] Add a `cron` job for updating the `hosts` file every week.
+- [x] Replace `wget`.
+- [ ] Ports:
+  - [ ] Windows.
+  - [x] OS X (has a link to this file).
+  - [x] BSD and other \*nixes (uses the same file location).
 
 # License
 
