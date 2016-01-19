@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # A Shell Blocker Installer
 
 if [ ! $(whoami) = "root" ]; then
