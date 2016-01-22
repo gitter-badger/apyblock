@@ -3,20 +3,22 @@
 # A Shell Blocker
 # Block annoying ADs with a single script.
 #
-# Copyright (C) 2016, Federico Damián Schonborn <federicodamians@gmail.com>
+# Copyright (C) 2016 Federico Damián Schonborn <federicodamians@gmail.com>
 #
-# This program is free software: you can redistribute it and/or modify
+# This file is part of A Shell Blocker.
+#
+# A Shell Blocker is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
 #
-# This program is distributed in the hope that it will be useful,
+# A Shell Blocker is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with A Shell Blocker. If not, see <http://www.gnu.org/licenses/>.
 
 # Configurations:
 
@@ -38,34 +40,96 @@ send_success() {
   notify-send "A Shell Blocker" "$1" -i face-smile-symbolic
 }
 
+# Check if local configuration file exists:
+check_localconf() {
+  if [[ -f ~/.config/ashblock/source.conf ]]; then
+    rm ~/.config/ashblock/source.conf
+  else
+    if [[ ! -d ~/.config/ashblock ]]; then
+      mkdir -pv ~/.config/ashblock
+    fi
+    touch ~/.config/ashblock/source.conf
+  fi
+}
+
+# If exists, load local configuration file:
+load_localconf() {
+  if [[ -f ~/.config/ashblock/source.conf ]]; then
+    echo -e "Using local configuration file"
+    source ~/.config/ashblock/source.conf
+  fi
+}
+
+# Back-up the original hosts file:
+backup_hosts() {
+  if [[ -f /etc/hosts ]]; then
+    mv /etc/hosts /etc/hosts.bak
+  fi
+}
+
 case $1 in
   about|-a)
     echo -e "\n> A Shell Blocker (ashblock)"
     echo -e "> Block annoying ADs with a simple script."
-    echo -e "> Version: 2.0 \"Betelgeuse\""
+    echo -e "> Version: 2.0.98 (master) \"Betelgeuse\""
     echo -e "> License: GPLv2\n"
     ;;
   help|?)
-    echo -e "\nUsage: ashblock [about|help|shell]\n"
+    echo -e "\n> Usage: ashblock [OPTIONS]\n"
     echo -e "Options:"
-    echo -e "-a | about      See the version and license of this program."
-    echo -e "-d | desktop    Run in Desktop mode (default)."
-    echo -e "-s | shell      Execute ashblock in Shell mode (not pkexec and notify-send)."
-    echo -e " ? | help       This prompt!\n"
+    echo -e "-a  |  about          About A Shell Blocker."
+    echo -e " ?  |  help           This prompt!\n"
+    echo -e "Running mode:"
+    echo -e "-d  |  desktop        Run in Desktop mode (default)."
+    echo -e "-s  |  shell          Run in Shell mode (not pkexec/notify-send).\n"
+    echo -e "Source:"
+    echo -e "-cs |  change-source  Change the hosts file source (locally).\n"
+    echo -e "Local hosts file:"
+    echo -e "-r  |  restore        Restore the default hosts file (if you deleted it).\n"
+    echo -e "Cron job:"
+    echo -e "-dc |  disable-cron   Disable the Cron job."
+    echo -e "-ec |  enable-cron    Enable the Cron job.\n"
     ;;
-  shell|-s)
-    if [[ ! $(whoami) = root ]]; then
-      echo -e "\nYou need to run 'ashblock' as root!\n"
+  change-source|-cs)
+    check_localconf
+    echo -e "file_source=\""$2"\"" > ~/.config/ashblock/source.conf
+    ;;
+  restore|-r)
+    if [[ -f /usr/share/ashblock/hosts.backup ]]; then
+      sudo cp -v /usr/share/ashblock/hosts.backup /etc/hosts
+    else
+      echo -e "ERROR: Backup file is not found!"
       exit 1
     fi
-    curl "$file_source" -o /etc/hosts
+    ;;
+  disable-cron|-dc)
+    if [[ -x /etc/cron.daily/ashblock.cron ]]; then
+      sudo mv /etc/cron.daily/ashblock.cron /usr/share/ashblock/ashblock.cron
+    else
+      echo -e "ERROR: Cron job is not found!"
+      exit 1
+    fi
+    ;;
+  enable-cron|-ec)
+    if [[ -x /usr/share/ashblock/ashblock.cron ]]; then
+      sudo mv /usr/share/ashblock/ashblock.cron /etc/cron.daily/ashblock.cron
+    else
+      echo -e "ERROR: Cron job is not found!"
+      exit 1
+    fi
+    ;;
+  shell|-s)
+    load_localconf
+    sudo curl "$file_source" -o /etc/hosts
     ;;
   ""|desktop|-d)
+    load_localconf
     pkexec curl "$file_source" -o /etc/hosts
     if [[ $? == 0 ]]; then
       send_success "Done!"
     else
       send_error "Failed!"
+      exit 1
     fi
     ;;
 esac

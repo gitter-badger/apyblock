@@ -1,5 +1,23 @@
 #!/bin/bash
+#
 # A Shell Blocker Installer
+#
+# Copyright (C) 2016 Federico Damián Schonborn <federicodamians@gmail.com>
+#
+# This file is part of A Shell Blocker.
+#
+# A Shell Blocker is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# A Shell Blocker is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with A Shell Blocker. If not, see <http://www.gnu.org/licenses/>.
 
 if [ ! $(whoami) = "root" ]; then
   echo -e "ERROR: You need to run this script as root"
@@ -25,5 +43,15 @@ if [[ $cronyn == [yY] ]]; then
   echo -e "> Cron job is installed."
 else
   echo -e "> Cron job is not installed."
+fi
+echo -en "> Install backup blank file? (y/n) "; read backupyn
+if [[ $backupyn == [yY] ]]; then
+  if [[ ! -d /usr/share/ashblock ]]; then
+    mkdir -pv /usr/share/ashblock
+  fi
+  cp -v extras/backup/hosts /usr/share/ashblock/hosts.backup
+  echo -e "> Backup file is installed."
+else
+  echo -e "> Backup file is not installed."
 fi
 echo -e "> Finished!"
