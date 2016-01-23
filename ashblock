@@ -55,9 +55,9 @@ check_localconf() {
 # Check if any download program exists and make it default:
 check_downloader() {
   if [[ -x /usr/bin/curl ]]; then
-    DOWNLOADER="curl"
+    downloader="curl"
   elif [[ -x /usr/bin/wget ]]; then
-    DOWNLOADER="wget"
+    downloader="wget"
   else
     echo -e "Downloader program is not found!"
     exit 1
@@ -78,9 +78,6 @@ backup_hosts() {
     mv /etc/hosts /etc/hosts.bak
   fi
 }
-
-# Exec check_downloader():
-check_downloader
 
 # Start of case:
 case $1 in
@@ -136,11 +133,13 @@ case $1 in
     ;;
   shell|-s)
     load_localconf
-    sudo "$DOWNLOADER" "$file_source" -o /etc/hosts
+    check_downloader
+    sudo "$downloader" "$file_source" -o /etc/hosts
     ;;
   ""|desktop|-d)
     load_localconf
-    pkexec "$DOWNLOADER" "$file_source" -o /etc/hosts
+    check_downloader
+    pkexec "$downloader" "$file_source" -o /etc/hosts
     if [[ $? == 0 ]]; then
       send_success "Done!"
     else
