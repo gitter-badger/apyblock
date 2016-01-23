@@ -52,6 +52,18 @@ check_localconf() {
   fi
 }
 
+# Check if any download program exists and make it default:
+check_downloader() {
+  if [[ -x /usr/bin/curl ]]; then
+    DOWNLOADER="curl"
+  elif [[ -x /usr/bin/wget ]]; then
+    DOWNLOADER="wget"
+  else
+    echo -e "Downloader program is not found!"
+    exit 1
+  fi
+}
+
 # If exists, load local configuration file:
 load_localconf() {
   if [[ -f ~/.config/ashblock/source.conf ]]; then
@@ -67,6 +79,10 @@ backup_hosts() {
   fi
 }
 
+# Exec check_downloader():
+check_downloader
+
+# Start of case:
 case $1 in
   about|-a)
     echo -e "\n> A Shell Blocker (ashblock)"
@@ -120,11 +136,11 @@ case $1 in
     ;;
   shell|-s)
     load_localconf
-    sudo curl "$file_source" -o /etc/hosts
+    sudo "$DOWNLOADER" "$file_source" -o /etc/hosts
     ;;
   ""|desktop|-d)
     load_localconf
-    pkexec curl "$file_source" -o /etc/hosts
+    pkexec "$DOWNLOADER" "$file_source" -o /etc/hosts
     if [[ $? == 0 ]]; then
       send_success "Done!"
     else
