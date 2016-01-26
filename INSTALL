@@ -32,26 +32,12 @@ echo -e "> Installing..."
 cp -v ashblock /usr/bin/ashblock
 echo -en "> Install Cron job (it will update the hosts file every day)? (y/n) "; read cronyn
 if [[ $cronyn == [yY] ]]; then
-  if [[ ! -d /etc/ashblock ]]; then
-    mkdir -pv /etc/ashblock
-  fi
-  cp -v extras/cronjob/cronjob.conf /etc/ashblock/cronjob.conf
   if [[ ! -d /etc/cron.daily ]]; then
     mkdir -pv /etc/cron.daily
   fi
-  cp -v extras/cronjob/ashblock.cron /etc/cron.daily/ashblock.cron
+  cp -v ashblock.cron /etc/cron.daily/ashblock.cron
   echo -e "> Cron job is installed."
 else
   echo -e "> Cron job is not installed."
-fi
-echo -en "> Install backup blank file? (y/n) "; read backupyn
-if [[ $backupyn == [yY] ]]; then
-  if [[ ! -d /usr/share/ashblock ]]; then
-    mkdir -pv /usr/share/ashblock
-  fi
-  cp -v extras/backup/hosts /usr/share/ashblock/hosts.backup
-  echo -e "> Backup file is installed."
-else
-  echo -e "> Backup file is not installed."
 fi
 echo -e "> Finished!"

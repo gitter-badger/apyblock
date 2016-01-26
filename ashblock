@@ -27,19 +27,6 @@ file_source="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 
 # Functions:
 
-# Print error via notify-send:
-send_error() {
-  echo -e "$1"
-  notify-send "A Shell Blocker" "$1" -i face-sad-symbolic
-  exit 1
-}
-
-# Print success via notify-send:
-send_success() {
-  echo -e "$1"
-  notify-send "A Shell Blocker" "$1" -i face-smile-symbolic
-}
-
 # Check if local configuration file exists:
 check_localconf() {
   if [[ -f ~/.config/ashblock/source.conf ]]; then
@@ -49,18 +36,6 @@ check_localconf() {
       mkdir -pv ~/.config/ashblock
     fi
     touch ~/.config/ashblock/source.conf
-  fi
-}
-
-# Check if any download program exists and make it default:
-check_downloader() {
-  if [[ -x /usr/bin/curl ]]; then
-    downloader="curl"
-  elif [[ -x /usr/bin/wget ]]; then
-    downloader="wget"
-  else
-    echo -e "Downloader program is not found!"
-    exit 1
   fi
 }
 
@@ -88,63 +63,64 @@ case $1 in
     echo -e "> License: GPLv2\n"
     ;;
   help|?)
-    echo -e "\n> Usage: ashblock [OPTIONS]\n"
+    echo -e "\n> Usage: ashblock\n"
     echo -e "Options:"
-    echo -e "-a  |  about          About A Shell Blocker."
-    echo -e " ?  |  help           This prompt!\n"
-    echo -e "Running mode:"
-    echo -e "-d  |  desktop        Run in Desktop mode (default)."
-    echo -e "-s  |  shell          Run in Shell mode (not pkexec/notify-send).\n"
+    echo -e "-a | about           About A Shell Blocker."
+    echo -e " ? | help            This prompt!\n"
     echo -e "Source:"
-    echo -e "-cs |  change-source  Change the hosts file source (locally).\n"
+    echo -e "-s | source          Change the hosts file source (locally).\n"
     echo -e "Local hosts file:"
-    echo -e "-r  |  restore        Restore the default hosts file (if you deleted it).\n"
+    echo -e "-r | restore         Restore the default hosts file (if you deleted it).\n"
     echo -e "Cron job:"
-    echo -e "-dc |  disable-cron   Disable the Cron job."
-    echo -e "-ec |  enable-cron    Enable the Cron job.\n"
+    echo -e "-c | cron            Enable/disable Cron Job\n"
     ;;
-  change-source|-cs)
-    check_localconf
-    echo -e "file_source=\""$2"\"" > ~/.config/ashblock/source.conf
+  source|-s)
+    if [[ $2 == * ]]; then
+      check_localconf
+      echo -e "file_source=\""$2"\"" > ~/.config/ashblock/source.conf
+      echo -e "Testing new source URL..."
+      load_localconf
+      curl "$file_source" -o source.test
+    elif [[ $2 == "default" ]]; then
+      check_localconf
+      rm -rf ~/.config/ashblock
+    else
+      echo -e "\n> A Shell Blocker (ashblock) -- Source File changer"
+      echo -e "\n> Usage: ashblock source https://anyweb.com/hosts"
+      echo -e "  or:    ashblock source default\n"
+    fi
     ;;
   restore|-r)
-    if [[ -f /usr/share/ashblock/hosts.backup ]]; then
-      sudo cp -v /usr/share/ashblock/hosts.backup /etc/hosts
+    if [[ -f /etc/hosts.bak ]]; then
+      sudo mv -v /etc/hosts.bak /etc/hosts
     else
       echo -e "ERROR: Backup file is not found!"
       exit 1
     fi
     ;;
-  disable-cron|-dc)
-    if [[ -x /etc/cron.daily/ashblock.cron ]]; then
-      sudo mv /etc/cron.daily/ashblock.cron /usr/share/ashblock/ashblock.cron
+  cron|-c)
+    if [[ $2 == --enable ]]; then
+      if [[ -x /usr/share/ashblock/ashblock.cron ]]; then
+        sudo mv /usr/share/ashblock/ashblock.cron /etc/cron.daily/ashblock.cron
+      else
+        echo -e "ERROR: Cron job is not found!"
+        exit 1
+      fi
+    elif [[ $2 == --disable ]]; then
+      if [[ -x /etc/cron.daily/ashblock.cron ]]; then
+        sudo mv /etc/cron.daily/ashblock.cron /usr/share/ashblock/ashblock.cron
+      else
+        echo -e "ERROR: Cron job is not found!"
+        exit 1
+      fi
     else
-      echo -e "ERROR: Cron job is not found!"
-      exit 1
+      echo -e "\n> A Shell Blocker (ashblock) -- Cron Job switcher"
+      echo -e "\n> Usage: ashblock cron [--enable|--disable]\n"
     fi
     ;;
-  enable-cron|-ec)
-    if [[ -x /usr/share/ashblock/ashblock.cron ]]; then
-      sudo mv /usr/share/ashblock/ashblock.cron /etc/cron.daily/ashblock.cron
-    else
-      echo -e "ERROR: Cron job is not found!"
-      exit 1
-    fi
-    ;;
-  shell|-s)
+  "")
     load_localconf
-    check_downloader
-    sudo "$downloader" "$file_source" -o /etc/hosts
-    ;;
-  ""|desktop|-d)
-    load_localconf
-    check_downloader
-    pkexec "$downloader" "$file_source" -o /etc/hosts
-    if [[ $? == 0 ]]; then
-      send_success "Done!"
-    else
-      send_error "Failed!"
-      exit 1
-    fi
+    backup_hosts
+    sudo curl "$file_source" -o /etc/hosts
     ;;
 esac

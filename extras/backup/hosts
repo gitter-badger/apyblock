@@ -1,6 +1,0 @@
-# HOSTS file
-#
-# A normal hosts file, serves as backup for
-# A Shell Blocker (if backup file was removed!)
-
-127.0.0.1 localhost
