@@ -21,11 +21,11 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 ### Releases
 
-- Upcoming: v2.1 "Betelgeuse" (master).
+- Upcoming: v2.2 "Betelgeuse" (master).
 
-- Lastest: [v2.0](https://github.com/feskyde/ashblock/releases/tag/v2.0) "Betelgeuse".
+- Lastest: [v2.1](https://github.com/feskyde/ashblock/releases/tag/v2.1) "Betelgeuse".
 
-- For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page
+- For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page.
 
 ### TO-DO
 
@@ -34,7 +34,7 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 - [ ] Python 3 port (`urllib3`?).
 - [ ] OS support (listed as OS name :point_right: `File to replace`):
     - [x] GNU/Linux :point_right: `/etc/hosts`.
-    - [x] BSD (uses the same file location as GNU/Linux) :point_right: `/etc/hosts`.
+    - [x] BSD (same location as GNU/Linux) :point_right: `/etc/hosts`.
     - [ ] Windows :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
     - [ ] ReactOS :point_right: `reactos\system32\drivers\etc\hosts`.
     - [ ] OS X +10.2 (Hipsters will make this graphically) :point_right: `/private/etc/hosts`.
@@ -42,7 +42,7 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 ### License
 
-This program is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+A Shell Blocker is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
-Thus, ashblock is **free** (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
+Thus, A Shell Blocker is **free** (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
 
