@@ -50,7 +50,7 @@ load_localconf() {
 # Back-up the original hosts file:
 backup_hosts() {
   if [[ -f /etc/hosts ]]; then
-    mv /etc/hosts /etc/hosts.bak
+    sudo mv /etc/hosts /etc/hosts.bak
   fi
 }
 
@@ -78,9 +78,6 @@ case $1 in
     if [[ $2 == * ]]; then
       check_localconf
       echo -e "file_source=\""$2"\"" > ~/.config/ashblock/source.conf
-      echo -e "Testing new source URL..."
-      load_localconf
-      curl "$file_source" -o source.test
     elif [[ $2 == "default" ]]; then
       check_localconf
       rm -rf ~/.config/ashblock
@@ -92,6 +89,7 @@ case $1 in
     ;;
   restore|-r)
     if [[ -f /etc/hosts.bak ]]; then
+      sudo rm -rfv /etc/hosts
       sudo mv -v /etc/hosts.bak /etc/hosts
     else
       echo -e "ERROR: Backup file is not found!"
