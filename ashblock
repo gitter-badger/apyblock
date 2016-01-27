@@ -25,6 +25,8 @@
 # Set the webpage for downloading the /etc/hosts file:
 file_source="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
 
+# Configurations end.
+
 # Functions:
 
 # Check if local configuration file exists:
@@ -54,12 +56,15 @@ backup_hosts() {
   fi
 }
 
+# Functions end.
+
 # Start of case:
 case $1 in
   about|-a)
     echo -e "\n> A Shell Blocker (ashblock)"
     echo -e "> Block annoying ADs with a simple script."
-    echo -e "> Version: 2.0.98 (master) \"Betelgeuse\""
+    echo -e "> Version: 2.1 \"Betelgeuse\""
+    echo -e "> Homepage: https://feskyde.github.io/ashblock"
     echo -e "> License: GPLv2\n"
     ;;
   help|?)
@@ -122,3 +127,6 @@ case $1 in
     sudo curl "$file_source" -o /etc/hosts
     ;;
 esac
+# End of case.
+
+# Script end.
