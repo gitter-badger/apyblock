@@ -9,11 +9,11 @@ A Shell Blocker, the script for blocking ads on the web.
 
 ### Usage
 
-Just double-click the `ashblock` file (after checking if it's executable).
+Just execute the `ashblock` script in a terminal.
 
 ### Cron job
 
-A Cron job that updates the `host` file automagically can be executed daily (at 00:00 UTC time), check [extras/cronjob](https://github.com/feskyde/ashblock/tree/master/extras/cronjob) folder.
+A Cron job that updates the `host` file automagically can be executed daily (at 12:00AM UTC time).
 
 ### Installation
 
@@ -21,18 +21,24 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 ### Releases
 
-Lastest: [v2.0](https://github.com/feskyde/ashblock/releases/tag/v2.0) "Betelgeuse".
+- Upcoming: v2.1 "Betelgeuse" (master).
 
-For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page
+- Lastest: [v2.0](https://github.com/feskyde/ashblock/releases/tag/v2.0) "Betelgeuse".
+
+- For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page
 
 ### TO-DO
 
-- [x] Add a `cron` job for updating the `hosts` file every week.
+- [x] Add a `cron` job for updating the `hosts` file every day.
 - [x] Replace `wget` (now using `curl`).
-- [ ] Ports:
-  - [ ] Windows.
-  - [x] OS X (has a link to this file).
-  - [x] BSD and other \*nixes (uses the same file location).
+- [ ] Python 3 port (`urllib3`?).
+- [ ] OS support (listed as OS name :point_right: `File to replace`):
+    - [x] GNU/Linux :point_right: `/etc/hosts`.
+    - [x] BSD (uses the same file location as GNU/Linux) :point_right: `/etc/hosts`.
+    - [ ] Windows :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
+    - [ ] ReactOS :point_right: `reactos\system32\drivers\etc\hosts`.
+    - [ ] OS X +10.2 (Hipsters will make this graphically) :point_right: `/private/etc/hosts`.
+    - [ ] Haiku :point_right: `/boot/common/settings/network/hosts`.
 
 ### License
 
