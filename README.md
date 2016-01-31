@@ -43,8 +43,10 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 - [ ] OS support (listed as OS name :point_right: `File to replace`):
     - [x] GNU/Linux and BSD :point_right: `/etc/hosts`.
     - [x] OS X :point_right: `/private/etc/hosts`.
-    - [ ] Windows (low priority) :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
-    - [ ] ReactOS (low priority) :point_right: `reactos\system32\drivers\etc\hosts`.
+    - [ ] Low priority OSes:
+        - [ ] Windows.
+        - [ ] ReactOS.
+        - [ ] Haiku.
 
 ### License
 

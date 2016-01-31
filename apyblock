@@ -31,7 +31,7 @@ import subprocess
 
 name = "APyBlock"
 description = "Block annoying ADs with a simple script."
-version = "3.0 (master)"
+version = "2.9.98-Alpha"
 codename = "Cygnus"
 homepage = "https://feskyde.github.io/ashblock"
 license = "GPLv2"
@@ -93,10 +93,10 @@ def DownloadOSX():
     subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
     subprocess.call(["sudo", "curl", hosts_source, "-o", "/private/etc/hosts"])
 
-def DownloadWindows():
-    """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts """
-    print(color.grec + "> Downloading..." + color.endc)
-    print(color.redc + "> Not yet available, sorry!" + color.endc)
+#def DownloadWindows():
+#    """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts """
+#    print(color.grec + "> Downloading..." + color.endc)
+#    print(color.redc + "> Not yet available, sorry!" + color.endc)
 
 def RestoreUnix():
     """ Restore hosts file to original location in Unix """
@@ -110,11 +110,11 @@ def RestoreOSX():
     subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts.bak", "/private/etc/hosts"])
     sys.exit(0)
 
-def RestoreWindows():
-    """ Restore hosts file to original location in Windows """
-    print(color.yelc + "> Restoring original hosts file..." + color.endc)
-    print(color.redc + "> Not yet available, sorry!" + color.endc)
-    sys.exit(0)
+#def RestoreWindows():
+#    """ Restore hosts file to original location in Windows """
+#    print(color.yelc + "> Restoring original hosts file..." + color.endc)
+#    print(color.redc + "> Not yet available, sorry!" + color.endc)
+#    sys.exit(0)
 
 # The MainScript! (needs a cleanup)
 
@@ -141,15 +141,15 @@ def MainScript():
         if args.verbose:
             print(color.yelc + "> Using DownloadOSX()..." + color.endc)
         DownloadOSX()
-    elif sys.platform.startswith('win32'):
-        if args.verbose:
-            print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
-        print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
-        if args.restore:
-            RestoreWindows()
-        if args.verbose:
-            print(color.yelc + "> Using DownloadWindows()..." + color.endc)
-        DownloadWindows()
+#    elif sys.platform.startswith('win32'):
+#        if args.verbose:
+#            print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
+#        print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
+#        if args.restore:
+#            RestoreWindows()
+#        if args.verbose:
+#            print(color.yelc + "> Using DownloadWindows()..." + color.endc)
+#        DownloadWindows()
 
 # Run the MainScript
 
