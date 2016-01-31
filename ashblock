@@ -59,7 +59,7 @@ backup_hosts() {
 # Functions end.
 
 # Start of case:
-case $1 in
+case ${1} in
   about|-a)
     echo -e "\n> A Shell Blocker (ashblock)"
     echo -e "> Block annoying ADs with a simple script."
@@ -82,7 +82,7 @@ case $1 in
   source|-s)
     if [[ $2 == * ]]; then
       check_localconf
-      echo -e "file_source=\""$2"\"" > ~/.config/ashblock/source.conf
+      echo -e "file_source=\"${2}\"" > ~/.config/ashblock/source.conf
     elif [[ $2 == "default" ]]; then
       check_localconf
       rm -rf ~/.config/ashblock
