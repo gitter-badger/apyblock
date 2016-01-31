@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+#
+# APyBlock (A Shell Blocker's Python 3 port)
+# Block annoying ADs with a single script.
+#
+# Copyright (C) 2016 Federico Damián Schonborn <federicodamians@gmail.com>
+#
+# This file is part of A Shell Blocker.
+#
+# A Shell Blocker is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+#
+# A Shell Blocker is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with A Shell Blocker. If not, see <http://www.gnu.org/licenses/>.
+
+import sys
+import argparse
+import subprocess
+
+name = "APyBlock"
+description = "Block annoying ADs with a simple script."
+version = "3.0 (master)"
+codename = "Cygnus"
+homepage = "https://feskyde.github.io/ashblock"
+license = "GPLv2"
+
+hosts_source = "http://hosts-file.net/download/hosts.txt"
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
+parser.add_argument("-a", "--about", help="about APyBlock", action="store_true")
+args = parser.parse_args()
+parser.parse_args()
+
+class color:
+   endc = '\033[0m'
+   undl = '\033[4m'
+   redc = '\033[91m'
+   grec = '\033[92m'
+   yelc = '\033[93m'
+
+def CheckVersion():
+    """ Checks for needed Python3 version, if not exists, exit with code 1 """
+    if sys.version_info[0] != 3 or sys.version_info[1] < 4:
+        print(color.redc + "> ERROR: A Shell Blocker requires Python version 3.4 or greater!" + color.endc)
+        sys.exit(1)
+
+def PrintAbout():
+    print("> " + name, "\n> " + description, "\n> Version: " + version, "\"" + codename + "\"", "\n> Homepage: " + homepage, "\n> License: " + license)
+    sys.exit(0)
+
+def DownloadUnix():
+    """ Download hosts file to /etc/hosts (a common location on Linux and BSD, yay!) """
+    print(color.grec + "> Downloading..." + color.endc)
+    subprocess.call(["sudo", "curl", hosts_source, "-o", "/etc/hosts"])
+    
+def DownloadOSX():
+    """ Download hosts file to /private/etc/hosts (because OS X is special) """
+    print(color.grec + "> Downloading..." + color.endc)
+    subprocess.call(["sudo", "curl", hosts_source, "-o", "/private/etc/hosts"])
+
+def DownloadWindows():
+    """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts """
+    print(color.redc + "> Not yet available, sorry!" + color.endc)
+
+def DetectSystem():
+    if args.verbose:
+        print(color.yelc + "> Verbose mode is turned ON" + color.endc)
+    if sys.platform.startswith('linux'):
+        if args.verbose:
+            print(color.yelc + "> sys.platform.startswith value is 'linux'" + color.endc)
+        print(color.grec + "> You're using Linux (or GNU/Linux, name it as you want)!")
+        if args.verbose:
+            print(color.yelc + "> Using DownloadUnix()..." + color.endc)
+        DownloadUnix()
+    elif sys.platform.startswith('freebsd'):
+        if args.verbose:
+            print(color.yelc + "> sys.platform.startswith value is 'freebsd'" + color.endc)
+        print(color.grec + "> You're using FreeBSD (or a derivated proyect)!")
+        if args.verbose:
+            print(color.yelc + "> Using DownloadUnix()..." + color.endc)
+        DownloadUnix()
+    elif sys.platform.startswith('darwin'):
+        if args.verbose:
+            print(color.yelc + "> sys.platform.startswith value is 'darwin'" + color.endc)
+        print(color.grec + "> You're using OS X (you lucky)!")
+        if args.verbose:
+            print(color.yelc + "> Using DownloadOSX()..." + color.endc)
+        DownloadOSX()
+    elif sys.platform.startswith('win32'):
+        if args.verbose:
+            print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
+        print(color.grec + "> You're using Windows (it's not funny)!")
+        if args.verbose:
+            print(color.yelc + "> Using DownloadWindows()..." + color.endc)
+        DownloadWindows()
+
+# Script
+
+if args.about:
+    PrintAbout()
+
+CheckVersion()
+DetectSystem()

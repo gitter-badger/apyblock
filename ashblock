@@ -23,7 +23,7 @@
 # Configurations:
 
 # Set the webpage for downloading the /etc/hosts file:
-file_source="https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+file_source="http://hosts-file.net/download/hosts.txt"
 
 # Configurations end.
 
@@ -63,7 +63,7 @@ case ${1} in
   about|-a)
     echo -e "\n> A Shell Blocker (ashblock)"
     echo -e "> Block annoying ADs with a simple script."
-    echo -e "> Version: 2.1 \"Betelgeuse\""
+    echo -e "> Version: 3.0 \"Cygnus\" (master)"
     echo -e "> Homepage: https://feskyde.github.io/ashblock"
     echo -e "> License: GPLv2\n"
     ;;

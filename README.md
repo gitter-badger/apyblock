@@ -11,6 +11,10 @@ A Shell Blocker, the script for blocking ads on the web.
 
 Just execute the `ashblock` script in a terminal.
 
+You can change the hosts file source by executing `ashblock source [URL]`!
+
+Optionally, you can try the new Python 3 port, `apyblock`!
+
 ### Cron job
 
 A Cron job that updates the `host` file automagically can be executed daily (at 12:00AM UTC time).
@@ -21,9 +25,9 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 ### Releases
 
-- Upcoming: v2.2 "Betelgeuse" (master).
+- Upcoming: v3.0 "Cygnus" (master).
 
-- Lastest: [v2.1](https://github.com/feskyde/ashblock/releases/tag/v2.1) "Betelgeuse".
+- Current: [v2.1](https://github.com/feskyde/ashblock/releases/tag/v2.1) "Betelgeuse".
 
 - For old releases go to [RELEASES](https://github.com/feskyde/ashblock/releases) page.
 
@@ -31,13 +35,14 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 - [x] Add a `cron` job for updating the `hosts` file every day.
 - [x] Replace `wget` (now using `curl`).
-- [ ] Python 3 port (`urllib3`?).
+- [x] Start Python 3 port (`apyblock`).
+- [ ] Finish Python 3 port.
 - [ ] OS support (listed as OS name :point_right: `File to replace`):
     - [x] GNU/Linux :point_right: `/etc/hosts`.
     - [x] BSD (same location as GNU/Linux) :point_right: `/etc/hosts`.
     - [ ] Windows :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
     - [ ] ReactOS :point_right: `reactos\system32\drivers\etc\hosts`.
-    - [ ] OS X +10.2 (Hipsters will make this graphically) :point_right: `/private/etc/hosts`.
+    - [x] OS X +10.2 :point_right: `/private/etc/hosts`.
     - [ ] Haiku :point_right: `/boot/common/settings/network/hosts`.
 
 ### License
