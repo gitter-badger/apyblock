@@ -23,5 +23,5 @@
 bindir="/usr/bin"
 
 if [ -x "$bindir"/ashblock ]; then
-  "$bindir"/ashblock shell
+  "$bindir"/ashblock
 fi

@@ -72,25 +72,10 @@ case ${1} in
     echo -e "Options:"
     echo -e "-a | about           About A Shell Blocker."
     echo -e " ? | help            This prompt!\n"
-    echo -e "Source:"
-    echo -e "-s | source          Change the hosts file source (locally).\n"
     echo -e "Local hosts file:"
     echo -e "-r | restore         Restore the default hosts file (if you deleted it).\n"
     echo -e "Cron job:"
     echo -e "-c | cron            Enable/disable Cron Job\n"
-    ;;
-  source|-s)
-    if [[ $2 == * ]]; then
-      check_localconf
-      echo -e "file_source=\"${2}\"" > ~/.config/ashblock/source.conf
-    elif [[ $2 == "default" ]]; then
-      check_localconf
-      rm -rf ~/.config/ashblock
-    else
-      echo -e "\n> A Shell Blocker (ashblock) -- Source File changer"
-      echo -e "\n> Usage: ashblock source https://anyweb.com/hosts"
-      echo -e "  or:    ashblock source default\n"
-    fi
     ;;
   restore|-r)
     if [[ -f /etc/hosts.bak ]]; then

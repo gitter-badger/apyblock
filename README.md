@@ -1,11 +1,12 @@
-# ashblock
+# ashblock/apyblock
 
-A Shell Blocker, the script for blocking ads on the web.
+A Shell Blocker/APyBlock, the script for blocking annoying ADs on the web.
 
 ### Dependencies
 
 - `curl`: for downloading the `hosts` file.
 - `cron`: for running the Cron job (if installed).
+- For ApyBlock: `python3.2` or greater.
 
 ### Usage
 
@@ -37,13 +38,13 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 - [x] Replace `wget` (now using `curl`).
 - [x] Start Python 3 port (`apyblock`).
 - [ ] Finish Python 3 port.
+    - [ ] Replace shell commands with Python functions.
+    - [x] Add a cron job.
 - [ ] OS support (listed as OS name :point_right: `File to replace`):
-    - [x] GNU/Linux :point_right: `/etc/hosts`.
-    - [x] BSD (same location as GNU/Linux) :point_right: `/etc/hosts`.
-    - [ ] Windows :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
-    - [ ] ReactOS :point_right: `reactos\system32\drivers\etc\hosts`.
-    - [x] OS X +10.2 :point_right: `/private/etc/hosts`.
-    - [ ] Haiku :point_right: `/boot/common/settings/network/hosts`.
+    - [x] GNU/Linux and BSD :point_right: `/etc/hosts`.
+    - [x] OS X :point_right: `/private/etc/hosts`.
+    - [ ] Windows (low priority) :point_right: `%SystemRoot%\System32\drivers\etc\hosts`.
+    - [ ] ReactOS (low priority) :point_right: `reactos\system32\drivers\etc\hosts`.
 
 ### License
 

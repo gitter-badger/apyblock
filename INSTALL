@@ -30,14 +30,18 @@ if [[ $installyn == [nN] ]]; then
 fi
 echo -e "> Installing..."
 cp -v ashblock /usr/bin/ashblock
-echo -en "> Install Cron job (it will update the hosts file every day)? (y/n) "; read cronyn
+echo -en "> Install Cron job? It will update the hosts file every day (y/n) "; read cronyn
 if [[ $cronyn == [yY] ]]; then
-  if [[ ! -d /etc/cron.daily ]]; then
-    mkdir -pv /etc/cron.daily
-  fi
-  cp -v ashblock.cron /etc/cron.daily/ashblock.cron
-  echo -e "> Cron job is installed."
-else
-  echo -e "> Cron job is not installed."
+    if [[ ! -d /etc/cron.daily ]]; then
+	mkdir -pv /etc/cron.daily
+    fi
+    cp -v ashblock.cron /etc/cron.daily/ashblock.cron
+    echo -e "> Cron job is installed."
+fi
+echo -en "> Install APyBlock? (y/n) "; read apyblockyn
+if [[ $apyblock == [yY] ]]; then
+  cp -v apyblock /usr/bin/apyblock
+  cp -v extra/cronjob/apyblock.cron
+  echo -e "> APyBlock is installed."
 fi
 echo -e "> Finished!"
