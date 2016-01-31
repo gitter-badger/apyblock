@@ -48,7 +48,7 @@ Run the `INSTALL` script, you can also choose if you want the Cron job to be ins
 
 ### License
 
-A Shell Blocker is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+A Shell Blocker/APyBlock is distributed under the [GNU Public License version 2](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
-Thus, A Shell Blocker is **free** (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
+Thus, A Shell Blocker/APyBlock is **free** (as in freedom and beer) and you can [view](https://github.com/feskyde/ashblock), edit and [fork](https://github.com/feskyde/ashblock/fork) the code if you want.
 
