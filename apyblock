@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# APyBlock (APyBlock's Python 3 port/replacement)
+# A Python Blocker
 # Block annoying ADs with a single script.
 #
 # Copyright (C) 2016 Federico Damián Schonborn <federicodamians@gmail.com>
 #
-# This file is part of APyBlock.
+# This file is part of A Python Blocker.
 #
-# APyBlock is free software: you can redistribute it and/or modify
+# A Python Blocker is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
 #
-# APyBlock is distributed in the hope that it will be useful,
+# A Python Blocker is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with APyBlock. If not, see <http://www.gnu.org/licenses/>.
+# along with A Python Blocker. If not, see <http://www.gnu.org/licenses/>.
 
 # Import all needed libraries
 
@@ -29,11 +29,11 @@ import subprocess
 
 # Set the script information
 
-name = "APyBlock"
+name = "A Python Blocker"
 description = "Block annoying ADs with a simple script."
-version = "2.9.98-Alpha"
+version = "2.9.99-Beta"
 codename = "Cygnus"
-homepage = "https://feskyde.github.io/ashblock"
+homepage = "https://feskyde.github.io/apyblock"
 license = "GPLv2"
 
 # Set the argument parser
@@ -70,7 +70,7 @@ class color:
 
 # Checks if script is executed with the mininum Python 3 version, if not, exit with code 1
 if sys.version_info[0] != 3 or sys.version_info[1] < 2:
-  print("> ERROR: APyBlock requires Python 3.2 or greater!")
+  print("> ERROR: A Python Blocker requires Python 3.2 or greater!")
   sys.exit(1)
 
 # Define the --about command
