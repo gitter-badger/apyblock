@@ -99,6 +99,7 @@ def DownloadOSX():
   subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
   subprocess.call(["curl", hosts_osx_source, "-o", "hosts.zip"])
   subprocess.call(["unzip", "hosts.zip"])
+  subprocess.call(["cd", "hosts"])
   if args.unsecure:
     subprocess.call(["sudo", "mv", "hosts-NoPHAFSA.txt", "/private/etc/hosts"])
   else:
