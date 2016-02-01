@@ -36,10 +36,6 @@ codename = "Cygnus"
 homepage = "https://feskyde.github.io/ashblock"
 license = "GPLv2"
 
-# Set the hosts file source URL
-
-hosts_source = "http://hosts-file.net/download/hosts.txt"
-
 # Set the argument parser
 
 parser = argparse.ArgumentParser()
@@ -49,10 +45,20 @@ if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
   group.add_argument("-d", "--disable-cron", help="disables Cron Job", action="store_true")
 
 parser.add_argument("-r", "--restore", help="restore old hosts file", action="store_true")
+parser.add_argument("-u", "--unsecure", help="no block illegal pharmacy and fraud sites", action="store_true")
 parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
 parser.add_argument("-a", "--about", help="about APyBlock", action="store_true")
 args = parser.parse_args()
 parser.parse_args()
+
+# Set the hosts file source URL
+
+if args.unsecure:
+  hosts_source = "http://hosts-file.net/download/hosts-NOPHAFSA.txt"
+  hosts_osx_source = "http://hosts-file.net/download/mac_hosts-NOPHAFSA.zip"
+else:
+  hosts_source = "http://hosts-file.net/download/hosts.txt"
+  hosts_osx_source = "http://hosts-file.net/download/mac_hosts.zip"
 
 # Add color to your life
 
@@ -91,7 +97,12 @@ def DownloadOSX():
   """ Download hosts file to /private/etc/hosts (because OS X is 'special') """
   print(color.grec + "> Downloading..." + color.endc)
   subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
-  subprocess.call(["sudo", "curl", hosts_source, "-o", "/private/etc/hosts"])
+  subprocess.call(["curl", hosts_osx_source, "-o", "hosts.zip"])
+  subprocess.call(["unzip", "hosts.zip"])
+  if args.unsecure:
+    subprocess.call(["sudo", "mv", "hosts-NoPHAFSA.txt", "/private/etc/hosts"])
+  else:
+    subprocess.call(["sudo", "mv", "hosts.txt", "/private/etc/hosts"])
 
 def DownloadWindows():
   """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts (using PowerShell)"""
