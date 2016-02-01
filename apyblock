@@ -44,9 +44,9 @@ hosts_source = "http://hosts-file.net/download/hosts.txt"
 
 parser = argparse.ArgumentParser()
 if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("-e", "--enable-cron", help="enables Cron Job", action="store_true")
-    group.add_argument("-d", "--disable-cron", help="disables Cron Job", action="store_true")
+  group = parser.add_mutually_exclusive_group()
+  group.add_argument("-e", "--enable-cron", help="enables Cron Job", action="store_true")
+  group.add_argument("-d", "--disable-cron", help="disables Cron Job", action="store_true")
 
 parser.add_argument("-r", "--restore", help="restore old hosts file", action="store_true")
 parser.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
@@ -57,100 +57,101 @@ parser.parse_args()
 # Add color to your life
 
 class color:
-   endc = '\033[0m'
-   redc = '\033[91m'
-   grec = '\033[92m'
-   yelc = '\033[93m'
+  endc = '\033[0m'
+  redc = '\033[91m'
+  grec = '\033[92m'
+  yelc = '\033[93m'
 
 # Checks if script is executed with the mininum Python 3 version, if not, exit with code 1
 if sys.version_info[0] != 3 or sys.version_info[1] < 2:
-    print("> ERROR: APyBlock requires Python 3.2 or greater!")
-    sys.exit(1)
+  print("> ERROR: APyBlock requires Python 3.2 or greater!")
+  sys.exit(1)
 
 # Define the --about command
 
 def PrintAbout():
-    print("> " + name, 
-          "\n> " + description, 
-          "\n> Version: " + version, 
-          "\"" + codename + "\"", 
-          "\n> Homepage: " + homepage, 
-          "\n> License: " + license
-          )
-    sys.exit(0)
+  print("> " + name, 
+    "\n> " + description, 
+    "\n> Version: " + version, 
+    "\"" + codename + "\"", 
+    "\n> Homepage: " + homepage, 
+    "\n> License: " + license
+    )
+  sys.exit(0)
 
 # Definitions of download/restore commands
 
 def DownloadUnix():
-    """ Download hosts file to /etc/hosts (a common location on Linux and BSD, yay!) """
-    print(color.grec + "> Downloading..." + color.endc)
-    subprocess.call(["sudo", "mv", "-v", "/etc/hosts", "/etc/hosts.bak"])
-    subprocess.call(["sudo", "curl", hosts_source, "-o", "/etc/hosts"])
+  """ Download hosts file to /etc/hosts (a common location on Linux and BSD, yay!) """
+  print(color.grec + "> Downloading..." + color.endc)
+  subprocess.call(["sudo", "mv", "-v", "/etc/hosts", "/etc/hosts.bak"])
+  subprocess.call(["sudo", "curl", hosts_source, "-o", "/etc/hosts"])
 
 def DownloadOSX():
-    """ Download hosts file to /private/etc/hosts (because OS X is 'special') """
-    print(color.grec + "> Downloading..." + color.endc)
-    subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
-    subprocess.call(["sudo", "curl", hosts_source, "-o", "/private/etc/hosts"])
+  """ Download hosts file to /private/etc/hosts (because OS X is 'special') """
+  print(color.grec + "> Downloading..." + color.endc)
+  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
+  subprocess.call(["sudo", "curl", hosts_source, "-o", "/private/etc/hosts"])
 
-#def DownloadWindows():
-#    """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts """
-#    print(color.grec + "> Downloading..." + color.endc)
-#    print(color.redc + "> Not yet available, sorry!" + color.endc)
+def DownloadWindows():
+  """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts (using PowerShell)"""
+  print(color.grec + "> Downloading..." + color.endc)
+  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts", "%SystemRoot%\System32\drivers\etc\hosts.bak"])
+  subprocess.call(["Invoke-WebRequest", hosts_source, "-OutFile", "%SystemRoot%\System32\drivers\etc\hosts"])
 
 def RestoreUnix():
-    """ Restore hosts file to original location in Unix """
-    print(color.yelc + "> Restoring original hosts file..." + color.endc)
-    subprocess.call(["sudo", "mv", "-v", "/etc/hosts.bak", "/etc/hosts"])
-    sys.exit(0)
+  """ Restore hosts file to original location in Unix """
+  print(color.yelc + "> Restoring original hosts file..." + color.endc)
+  subprocess.call(["sudo", "mv", "-v", "/etc/hosts.bak", "/etc/hosts"])
+  sys.exit(0)
 
 def RestoreOSX():
-    """ Restore hosts file to original location in OS X """
-    print(color.yelc + "> Restoring original hosts file..." + color.endc)
-    subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts.bak", "/private/etc/hosts"])
-    sys.exit(0)
+  """ Restore hosts file to original location in OS X """
+  print(color.yelc + "> Restoring original hosts file..." + color.endc)
+  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts.bak", "/private/etc/hosts"])
+  sys.exit(0)
 
-#def RestoreWindows():
-#    """ Restore hosts file to original location in Windows """
-#    print(color.yelc + "> Restoring original hosts file..." + color.endc)
-#    print(color.redc + "> Not yet available, sorry!" + color.endc)
-#    sys.exit(0)
+def RestoreWindows():
+  """ Restore hosts file to original location in Windows """
+  print(color.yelc + "> Restoring original hosts file..." + color.endc)
+  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts.bak", "%SystemRoot%\System32\drivers\etc\hosts"])
+  sys.exit(0)
 
 # The MainScript! (needs a cleanup)
 
 def MainScript():
-    if args.about:
-        PrintAbout()
+  if args.about:
+    PrintAbout()
+  if args.verbose:
+    print(color.yelc + "> Verbose mode is turned ON" + color.endc)
+  if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
     if args.verbose:
-        print(color.yelc + "> Verbose mode is turned ON" + color.endc)
-    if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
-        if args.verbose:
-            print(color.yelc + "> sys.platform.startswith value is 'linux' or 'freebsd'" + color.endc)
-        print(color.grec + "> You're using Linux or FreeBSD (FOSS FTW!)." + color.endc)
-        if args.restore:
-            RestoreUnix()
-        if args.verbose:
-            print(color.yelc + "> Using DownloadUnix()..." + color.endc)
-        DownloadUnix()
-    elif sys.platform.startswith('darwin'):
-        if args.verbose:
-            print(color.yelc + "> sys.platform.startswith value is 'darwin'" + color.endc)
-        print(color.grec + "> You're using OS X (elegant!)." + color.endc)
-        if args.restore:
-            RestoreOSX()
-        if args.verbose:
-            print(color.yelc + "> Using DownloadOSX()..." + color.endc)
-        DownloadOSX()
-#    elif sys.platform.startswith('win32'):
-#        if args.verbose:
-#            print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
-#        print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
-#        if args.restore:
-#            RestoreWindows()
-#        if args.verbose:
-#            print(color.yelc + "> Using DownloadWindows()..." + color.endc)
-#        DownloadWindows()
+      print(color.yelc + "> sys.platform.startswith value is 'linux' or 'freebsd'" + color.endc)
+    print(color.grec + "> You're using Linux or FreeBSD (FOSS FTW!)." + color.endc)
+    if args.restore:
+      RestoreUnix()
+    if args.verbose:
+      print(color.yelc + "> Using DownloadUnix()..." + color.endc)
+    DownloadUnix()
+  elif sys.platform.startswith('darwin'):
+    if args.verbose:
+      print(color.yelc + "> sys.platform.startswith value is 'darwin'" + color.endc)
+    print(color.grec + "> You're using OS X (elegant!)." + color.endc)
+    if args.restore:
+      RestoreOSX()
+    if args.verbose:
+      print(color.yelc + "> Using DownloadOSX()..." + color.endc)
+    DownloadOSX()
+  elif sys.platform.startswith('win32'):
+    if args.verbose:
+      print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
+    print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
+    if args.restore:
+      RestoreWindows()
+    if args.verbose:
+      print(color.yelc + "> Using DownloadWindows()..." + color.endc)
+    DownloadWindows()
 
-# Run the MainScript
+# Runs the MainScript!
 
 MainScript()
