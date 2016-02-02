@@ -21,17 +21,49 @@
 # You should have received a copy of the GNU General Public License
 # along with A Python Blocker. If not, see <http://www.gnu.org/licenses/>.
 
-# Import all needed libraries
+# Import system libraries for Python 3 version checking and administrator user checking
 
+import os
+import ctypes
 import sys
+
+# Checks if script is executed with the mininum Python 3 version, if not, exit with code 1
+
+if sys.version_info[0] != 3 or sys.version_info[1] < 2:
+  print("> ERROR: A Python Blocker requires Python 3.2 or greater!")
+  sys.exit(1)
+
+# Code taken from Stack Overflow, kill me plz
+
+try:
+  admin = os.getuid() == 0
+except AttributeError:
+  admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+  
+if admin == False
+  print("> ERROR: You need to run APyBlock with Administrator privileges!")
+  sys.exit(1)
+
+# If Python 3 version is OK, import the next needed libraries
+
 import argparse
-import subprocess
+
+# If any little thing fails, here is subprocess
+
+#import subprocess
+
+# NON TESTED! It will replace curl/Invoke-WebRequest, "unzip" and "mv" subprocess
+
+from urllib.request import urlretrieve
+import shutil
+import zipfile
 
 # Set the script information
 
 name = "A Python Blocker"
 description = "Block annoying ADs with a simple script."
-version = "2.9.99-Beta"
+version = "2.9.99"
+status = "Beta"
 codename = "Cygnus"
 homepage = "https://feskyde.github.io/apyblock"
 license = "GPLv2"
@@ -68,101 +100,110 @@ class color:
   grec = '\033[92m'
   yelc = '\033[93m'
 
-# Checks if script is executed with the mininum Python 3 version, if not, exit with code 1
-if sys.version_info[0] != 3 or sys.version_info[1] < 2:
-  print("> ERROR: A Python Blocker requires Python 3.2 or greater!")
-  sys.exit(1)
-
 # Define the --about command
 
 def PrintAbout():
   print("> " + name, 
     "\n> " + description, 
-    "\n> Version: " + version, 
+    "\n> Version: " + version + "-" + status,
     "\"" + codename + "\"", 
     "\n> Homepage: " + homepage, 
     "\n> License: " + license
     )
-  sys.exit(0)
 
 # Definitions of download/restore commands
 
 def DownloadUnix():
   """ Download hosts file to /etc/hosts (a common location on Linux and BSD, yay!) """
   print(color.grec + "> Downloading..." + color.endc)
-  subprocess.call(["sudo", "mv", "-v", "/etc/hosts", "/etc/hosts.bak"])
-  subprocess.call(["sudo", "curl", hosts_source, "-o", "/etc/hosts"])
+#  subprocess.call(["sudo", "mv", "-v", "/etc/hosts", "/etc/hosts.bak"])
+  shutil.copy("/etc/hosts", "/etc/hosts.bak")
+#  subprocess.call(["sudo", "curl", hosts_source, "-o", "/etc/hosts"])
+  urllib.request.urlretrieve(hosts_source, "hosts.txt")
+  shutil.copy("hosts.txt", "/etc/hosts")
 
 def DownloadOSX():
   """ Download hosts file to /private/etc/hosts (because OS X is 'special') """
   print(color.grec + "> Downloading..." + color.endc)
-  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
-  subprocess.call(["curl", hosts_osx_source, "-o", "hosts.zip"])
-  subprocess.call(["unzip", "hosts.zip"])
-  subprocess.call(["cd", "hosts"])
+#  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts", "/private/etc/hosts.bak"])
+  shutil.copy("/private/etc/hosts", "/private/etc/hosts.bak")
+#  subprocess.call(["curl", hosts_osx_source, "-o", "hosts.zip"])
+  urllib.request.urlretrieve(hosts_osx_source, "hosts.zip")
+#  subprocess.call(["unzip", "hosts.zip"])
+  zippedfile = zipfile.ZipFile("hosts.zip")
+  zippedfile.extractall("hosts")
   if args.unsecure:
-    subprocess.call(["sudo", "mv", "hosts-NoPHAFSA.txt", "/private/etc/hosts"])
+#    subprocess.call(["sudo", "mv", "hosts-NoPHAFSA.txt", "/private/etc/hosts"])
+    shutil.copy("hosts/hosts-NoPHAFSA.txt", "/private/etc/hosts")
   else:
-    subprocess.call(["sudo", "mv", "hosts.txt", "/private/etc/hosts"])
+#    subprocess.call(["sudo", "mv", "hosts.txt", "/private/etc/hosts"])
+    shutil.copy("hosts/hosts.txt", "/private/etc/hosts")
 
 def DownloadWindows():
-  """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts (using PowerShell)"""
+  """ Download hosts file to %SystemRoot%\System32\drivers\etc\hosts (using PowerShell) """
   print(color.grec + "> Downloading..." + color.endc)
-  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts", "%SystemRoot%\System32\drivers\etc\hosts.bak"])
-  subprocess.call(["Invoke-WebRequest", hosts_source, "-OutFile", "%SystemRoot%\System32\drivers\etc\hosts"])
+#  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts", "%SystemRoot%\System32\drivers\etc\hosts.bak"])
+  shutil.copy("%SystemRoot%\System32\drivers\etc\hosts", "%SystemRoot%\System32\drivers\etc\hosts.bak")
+#  subprocess.call(["Invoke-WebRequest", hosts_source, "-OutFile", "%SystemRoot%\System32\drivers\etc\hosts"])
+  urllib.request.urlretrieve(hosts_source, "hosts.txt")
+  shutil.copy("hosts.txt", "%SystemRoot%\System32\drivers\etc\hosts")
 
 def RestoreUnix():
   """ Restore hosts file to original location in Unix """
   print(color.yelc + "> Restoring original hosts file..." + color.endc)
-  subprocess.call(["sudo", "mv", "-v", "/etc/hosts.bak", "/etc/hosts"])
-  sys.exit(0)
+#  subprocess.call(["sudo", "mv", "-v", "/etc/hosts.bak", "/etc/hosts"])
+  shutil.copy("/etc/hosts.bak", "/etc/hosts")
 
 def RestoreOSX():
   """ Restore hosts file to original location in OS X """
   print(color.yelc + "> Restoring original hosts file..." + color.endc)
-  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts.bak", "/private/etc/hosts"])
-  sys.exit(0)
+#  subprocess.call(["sudo", "mv", "-v", "/private/etc/hosts.bak", "/private/etc/hosts"])
+  shutil.copy("/private/etc/hosts.bak", "/private/etc/hosts")
 
 def RestoreWindows():
   """ Restore hosts file to original location in Windows """
   print(color.yelc + "> Restoring original hosts file..." + color.endc)
-  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts.bak", "%SystemRoot%\System32\drivers\etc\hosts"])
-  sys.exit(0)
+#  subprocess.call(["Move-Item", "%SystemRoot%\System32\drivers\etc\hosts.bak", "%SystemRoot%\System32\drivers\etc\hosts"])
+  shutil.copy("%SystemRoot%\System32\drivers\etc\hosts.bak", "%SystemRoot%\System32\drivers\etc\hosts")
 
 # The MainScript! (needs a cleanup)
 
 def MainScript():
   if args.about:
     PrintAbout()
-  if args.verbose:
-    print(color.yelc + "> Verbose mode is turned ON" + color.endc)
-  if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
+  else
     if args.verbose:
-      print(color.yelc + "> sys.platform.startswith value is 'linux' or 'freebsd'" + color.endc)
-    print(color.grec + "> You're using Linux or FreeBSD (FOSS FTW!)." + color.endc)
-    if args.restore:
-      RestoreUnix()
-    if args.verbose:
-      print(color.yelc + "> Using DownloadUnix()..." + color.endc)
-    DownloadUnix()
-  elif sys.platform.startswith('darwin'):
-    if args.verbose:
-      print(color.yelc + "> sys.platform.startswith value is 'darwin'" + color.endc)
-    print(color.grec + "> You're using OS X (elegant!)." + color.endc)
-    if args.restore:
-      RestoreOSX()
-    if args.verbose:
-      print(color.yelc + "> Using DownloadOSX()..." + color.endc)
-    DownloadOSX()
-  elif sys.platform.startswith('win32'):
-    if args.verbose:
-      print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
-    print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
-    if args.restore:
-      RestoreWindows()
-    if args.verbose:
-      print(color.yelc + "> Using DownloadWindows()..." + color.endc)
-    DownloadWindows()
+      print(color.yelc + "> Verbose mode is turned ON" + color.endc)
+    if sys.platform.startswith('linux') or sys.platform.startswith('freebsd'):
+      if args.verbose:
+        print(color.yelc + "> sys.platform.startswith value is 'linux' or 'freebsd'" + color.endc)
+      print(color.grec + "> You're using Linux or FreeBSD (FOSS FTW!)." + color.endc)
+      if args.restore:
+        RestoreUnix()
+      else
+        if args.verbose:
+          print(color.yelc + "> Using DownloadUnix()..." + color.endc)
+        DownloadUnix()
+    elif sys.platform.startswith('darwin'):
+      if args.verbose:
+        print(color.yelc + "> sys.platform.startswith value is 'darwin'" + color.endc)
+      print(color.grec + "> You're using OS X (elegant!)." + color.endc)
+      if args.restore:
+        RestoreOSX()
+      else
+        if args.verbose:
+          print(color.yelc + "> Using DownloadOSX()..." + color.endc)
+        DownloadOSX()
+    elif sys.platform.startswith('win32'):
+      if args.verbose:
+        print(color.yelc + "> sys.platform.startswith value is 'win32'" + color.endc)
+      print(color.grec + "> You're using Windows (avoid BSoDs!)." + color.endc)
+      if args.restore:
+        RestoreWindows()
+      else
+        if args.verbose:
+          print(color.yelc + "> Using DownloadWindows()..." + color.endc)
+        DownloadWindows()
 
 # Runs the MainScript!
 
