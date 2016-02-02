@@ -14,13 +14,12 @@ You can avoid blocking "fraud and illegal pharmacy" sites using `apyblock -u`.
 
 ### Releases
 
-- Upcoming: A Python Blocker v3.0 "Cygnus".
+| Status | Release | Codename | Language | Notes |
+|--------|---------|----------|----------|-------|
+| Testing | [v2.9.99 (Beta)](https://github.com/feskyde/apyblock/releases/tag/v2.9.99) | "Cygnus" | Python 3.2+ | First multiOS release |
+| Current | [v2.1](https://github.com/feskyde/apyblock/releases/tag/v2.1) | "Betelgeuse" | Bash | Linux-only release |
 
-- Pre-release: A Python Blocker [v2.9.99 (Beta)](https://github.com/feskyde/apyblock/releases/tag/v2.9.99) "Cygnus".
-
-- Current: A Shell Blocker (Linux-only) [v2.1](https://github.com/feskyde/apyblock/releases/tag/v2.1) "Betelgeuse".
-
-- For old releases go to [RELEASES](https://github.com/feskyde/apyblock/releases) page.
+> For older releases, check [RELEASES](https://github.com/feskyde/apyblock/releases) page.
 
 ### TO-DO
 
