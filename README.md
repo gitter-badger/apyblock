@@ -1,5 +1,7 @@
 # A Python Blocker
 
+[![Join the chat at https://gitter.im/feskyde/apyblock](https://badges.gitter.im/feskyde/apyblock.svg)](https://gitter.im/feskyde/apyblock?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A Python Blocker, the script for blocking annoying ADs on the web.
 
 ### Dependencies
